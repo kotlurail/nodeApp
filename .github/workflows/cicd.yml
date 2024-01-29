@@ -26,4 +26,4 @@ jobs:
         run: docker pull mohankumar7261995490/node-app:latest
 
       - name: Run Docker Container
-        run: docker run -d -p 4000:4000 --name node-app-container mohankumar7261995490/node-app:latest
+        run: docker run -d -p 4000:4000 --name node-app-container

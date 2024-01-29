@@ -4,11 +4,9 @@ async function connectDatabase() {
   const mongoUri =
     process.env.NODE_ENV === "PROD"
       ? process.env.MONGO_URI_PROD
-      : process.env.NODE_ENV === "DEV"
-      ? process.env.MONGO_URI_DEV
-      : process.env.MONGO_URI_TEST;
+      : console.log("failed to connect");
   mongoose
-    .connect(mongoUri)
+    .connect(mongoUri.trim())
     .then(() => console.log("MongoDb connected ..."))
     .catch((err) => console.log(err, "Err at 07"));
 }
