@@ -7,7 +7,7 @@ async function connectDatabase() {
       : console.log("failed to connect");
   mongoose
     .connect(mongoUri.trim())
-    .then(() => console.log("MongoDb connected ..."))
+    .then(() => console.log("MongoDb connected11 ..."))
     .catch((err) => console.log(err, "Err at 07"));
 }
 // console.log(process.env.MONGO_URL);
