@@ -54,15 +54,15 @@ jobs:
 
       - name: Run Docker Container
         run: docker run -d -p 4000:4000 \
-          -e DOCKER_USERNAME="${DOCKER_USERNAME}" \
-          -e DOCKER_PASSWORD="${DOCKER_PASSWORD}" \
-          -e JWT_SECRET_KEY="${JWT_SECRET_KEY}" \
-          -e MONGO_URI_PROD="${MONGO_URI_PROD}" \
-          -e NODE_ENV="${NODE_ENV}" \
-          -e PORT="${PORT}" \
-          -e SENDGRID_API_KEY="${SENDGRID_API_KEY}" \
-          -e SESSION_KEY="${SESSION_KEY}" \
-          -e TO_EMAIL="${TO_EMAIL}" \
+          -e DOCKER_USERNAME="${{ secrets.DOCKER_USERNAME }}" \
+          -e DOCKER_PASSWORD="${{ secrets.DOCKER_PASSWORD }}" \
+          -e JWT_SECRET_KEY="${{ secrets.JWT_SECRET_KEY }}" \
+          -e MONGO_URI_PROD="${{ secrets.MONGO_URI_PROD }}" \
+          -e NODE_ENV="${{ secrets.NODE_ENV }}" \
+          -e PORT="${{ secrets.PORT }}" \
+          -e SENDGRID_API_KEY="${{ secrets.SENDGRID_API_KEY }}" \
+          -e SESSION_KEY="${{ secrets.SESSION_KEY }}" \
+          -e TO_EMAIL="${{ secrets.TO_EMAIL }}" \
           --name node-app-container mohankumar7261995490/node-app:latest
 
       # Add SendGrid Email Notification on Failure
