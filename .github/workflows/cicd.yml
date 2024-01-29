@@ -30,7 +30,7 @@ jobs:
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
       - name: Build Docker Image
-        run: docker build -t mohankumar7261995490/node-app .
+        run: docker build -t mohankumar7261995490/node-app -f DockerFile .
 
       - name: Publish Image to Docker Hub
         run: docker push mohankumar7261995490/node-app:latest
