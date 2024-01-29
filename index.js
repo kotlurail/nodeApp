@@ -64,11 +64,11 @@ passport.use(
     done
   ) {
     // by default passport uses username
-    console.log({ email, password }, "mohan");
+    // console.log({ email, password }, "mohan");
     try {
-      console.log(User, "User at 55");
+      // console.log(User, "User at 55");
       const user = await User.findOne({ email: email }); // Use findOne instead of find
-      console.log(email, password, user);
+      // console.log(email, password, user, "71");
 
       if (!user) {
         return done(null, false, { message: "Invalid credentials" }); // for safety
@@ -89,10 +89,10 @@ passport.use(
             sanitizeUser(user),
             process.env.JWT_SECRET_KEY
           );
-          console.log(
-            { id: user.id, role: user.role, token },
-            "{ id: user.id, role: user.role, token }"
-          );
+          // console.log(
+          //   { id: user.id, role: user.role, token },
+          //   "{ id: user.id, role: user.role, token }"
+          // );
           done(null, { id: user.id, role: user.role, token }); // this line sends to serializer
         }
       );
@@ -107,7 +107,7 @@ passport.use(
   new JwtStrategy(opts, async function (jwt_payload, done) {
     try {
       const user = await User.findById(jwt_payload.id);
-      console.log(user, "user at 93");
+      // console.log(user, "user at 93");
       if (user) {
         return done(null, sanitizeUser(user)); // this calls serializer
       } else {

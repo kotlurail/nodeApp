@@ -10,5 +10,5 @@ async function connectDatabase() {
     .then(() => console.log("MongoDb connected ..."))
     .catch((err) => console.log(err, "Err at 07"));
 }
-console.log(process.env.MONGO_URL);
+// console.log(process.env.MONGO_URL);
 module.exports = connectDatabase;
