@@ -42,66 +42,33 @@ jobs:
       - name: Pull image from Docker Hub
         run: docker pull mohankumar7261995490/node-app:latest
 
+      - name: Stop and Remove Existing Container
+        run: |
+          docker stop node-app-container || true
+          docker rm node-app-container || true
+
       - name: Run Docker Container
         run: |
           docker run -d -p 4000:4000 \
-          -e DOCKER_USERNAME='${{ secrets.DOCKER_USERNAME }}' \
-          -e DOCKER_PASSWORD='${{ secrets.DOCKER_PASSWORD }}' \
-          -e JWT_SECRET_KEY='${{ secrets.JWT_SECRET_KEY }}' \
-          -e MONGO_URI_PROD='${{ secrets.MONGO_URI_PROD }}' \
-          -e NODE_ENV='${{ secrets.NODE_ENV }}' \
-          -e PORT='${{ secrets.PORT }}' \
-          -e SENDGRID_API_KEY='${{ secrets.SENDGRID_API_KEY }}' \
-          -e SESSION_KEY='${{ secrets.SESSION_KEY }}' \
-          -e TO_EMAIL='${{ secrets.TO_EMAIL }}' \
-          --name node-app-container mohankumar7261995490/node-app:latest
+            -e DOCKER_USERNAME='${{ secrets.DOCKER_USERNAME }}' \
+            -e DOCKER_PASSWORD='${{ secrets.DOCKER_PASSWORD }}' \
+            -e JWT_SECRET_KEY='${{ secrets.JWT_SECRET_KEY }}' \
+            -e MONGO_URI_PROD='${{ secrets.MONGO_URI_PROD }}' \
+            -e NODE_ENV='${{ secrets.NODE_ENV }}' \
+            -e PORT='${{ secrets.PORT }}' \
+            -e SENDGRID_API_KEY='${{ secrets.SENDGRID_API_KEY }}' \
+            -e SESSION_KEY='${{ secrets.SESSION_KEY }}' \
+            -e TO_EMAIL='${{ secrets.TO_EMAIL }}' \
+            --name node-app-container mohankumar7261995490/node-app:latest
 
-      # Add SendGrid Email Notification on Failure
-      - name: Notify on Failure
-        if: failure()
+      # Add SendGrid Email Notification on Failure or Success
+      - name: Notify
+        if: always()
         run: |
           SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY }}
           TO_EMAIL=${{ secrets.TO_EMAIL }}
-          SUBJECT="GitHub Actions Deployment Failed"
-          BODY="Deployment of your Node.js application failed. Check the workflow run for details."
-
-          curl --request POST \
-            --url https://api.sendgrid.com/v3/mail/send \
-            --header "Authorization: Bearer $SENDGRID_API_KEY" \
-            --header "Content-Type: application/json" \
-            --data "{
-              \"personalizations\": [
-                {
-                  \"to\": [
-                    {
-                      \"email\": \"$TO_EMAIL\"
-                    }
-                  ],
-                  \"subject\": \"$SUBJECT\"
-                }
-              ],
-              \"from\": {
-                \"email\": \"your-sender-email@example.com\"
-              },
-              \"content\": [
-                {
-                  \"type\": \"text/plain\",
-                  \"value\": \"$BODY\"
-                }
-              ]
-            }"
-
-  notify_on_success:
-    needs: deploy
-    runs-on: ubuntu-latest
-    if: success()
-    steps:
-      - name: Notify on Success
-        run: |
-          SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY }}
-          TO_EMAIL=${{ secrets.TO_EMAIL }}
-          SUBJECT="GitHub Actions Deployment Succeeded"
-          BODY="Deployment of your Node.js application succeeded. Check the workflow run for details."
+          SUBJECT="GitHub Actions Deployment ${GITHUB_RUN_CONCLUSION}"
+          BODY="Deployment of your Node.js application ${GITHUB_RUN_CONCLUSION}. Check the workflow run for details."
 
           curl --request POST \
             --url https://api.sendgrid.com/v3/mail/send \
