@@ -44,7 +44,6 @@ jobs:
 
       - name: Run Docker Container
         run: |
-          docker pull mohankumar7261995490/node-app:latest
           docker run -d -p 4000:4000 \
           -e DOCKER_USERNAME='${{ secrets.DOCKER_USERNAME }}' \
           -e DOCKER_PASSWORD='${{ secrets.DOCKER_PASSWORD }}' \
@@ -65,6 +64,44 @@ jobs:
           TO_EMAIL=${{ secrets.TO_EMAIL }}
           SUBJECT="GitHub Actions Deployment Failed"
           BODY="Deployment of your Node.js application failed. Check the workflow run for details."
+
+          curl --request POST \
+            --url https://api.sendgrid.com/v3/mail/send \
+            --header "Authorization: Bearer $SENDGRID_API_KEY" \
+            --header "Content-Type: application/json" \
+            --data "{
+              \"personalizations\": [
+                {
+                  \"to\": [
+                    {
+                      \"email\": \"$TO_EMAIL\"
+                    }
+                  ],
+                  \"subject\": \"$SUBJECT\"
+                }
+              ],
+              \"from\": {
+                \"email\": \"your-sender-email@example.com\"
+              },
+              \"content\": [
+                {
+                  \"type\": \"text/plain\",
+                  \"value\": \"$BODY\"
+                }
+              ]
+            }"
+
+  notify_on_success:
+    needs: deploy
+    runs-on: ubuntu-latest
+    if: success()
+    steps:
+      - name: Notify on Success
+        run: |
+          SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY }}
+          TO_EMAIL=${{ secrets.TO_EMAIL }}
+          SUBJECT="GitHub Actions Deployment Succeeded"
+          BODY="Deployment of your Node.js application succeeded. Check the workflow run for details."
 
           curl --request POST \
             --url https://api.sendgrid.com/v3/mail/send \
