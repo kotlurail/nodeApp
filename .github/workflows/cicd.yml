@@ -38,16 +38,6 @@ jobs:
   deploy:
     needs: build
     runs-on: self-hosted
-    env:
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-      MONGO_URI_PROD: ${{ secrets.MONGO_URI_PROD }}
-      NODE_ENV: ${{ secrets.NODE_ENV }}
-      PORT: ${{ secrets.PORT }}
-      SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
-      SESSION_KEY: ${{ secrets.SESSION_KEY }}
-      TO_EMAIL: ${{ secrets.TO_EMAIL }}
     steps:
       - name: Pull image from Docker Hub
         run: docker pull mohankumar7261995490/node-app:latest
