@@ -68,7 +68,7 @@ passport.use(
     try {
       // console.log(User, "User at 55");
       const user = await User.findOne({ email: email }); // Use findOne instead of find
-      console.log("mohan");
+      console.log("mohan1");
 
       if (!user) {
         return done(null, false, { message: "Invalid credentials" }); // for safety
