@@ -42,12 +42,7 @@ server.use(
 );
 
 server.use(passport.authenticate("session"));
-server.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-  })
-);
+server.use(cors());
 server.use("/item/searchitem", searchController);
 //   server.options('*', cors());
 server.use(express.json());
