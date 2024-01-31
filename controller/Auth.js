@@ -60,7 +60,7 @@ exports.logout = async (req, res) => {
       httpOnly: true,
     })
     .status(200)
-    .json({ status: "loggedOut" });
+    .json({ status: "loggedOut1" });
   // req.logout();
 
   // Optional: Destroy the session
