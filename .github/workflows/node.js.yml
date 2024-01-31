@@ -27,4 +27,5 @@ jobs:
       - run: |
           touch .env
            echo "${{ secrets.environmentVar }}" > .env
-      - run: pm2 restart BackenedAPI
+      - run: /home/ubuntu/.nvm/versions/node/v16.20.2/bin/pm2 restart BackenedAPI
+      continue-on-error: true
