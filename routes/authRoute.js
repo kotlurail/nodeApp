@@ -16,6 +16,6 @@ router
   .get("/duplicate", (req, res) => {
     res
       .status(200)
-      .json({ name: "Mohan", Email: "mohankumar.kukkala@gmail.com" });
+      .json({ name: "Mohan", Email: "sravankumar.kukkala@gmail.com" });
   });
 module.exports = router;
