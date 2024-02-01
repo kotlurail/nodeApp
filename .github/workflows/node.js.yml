@@ -1,3 +1,6 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
 name: Node.js CI
 
 on:
@@ -11,49 +14,18 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Initialize NVM
-        run: |
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-
+      - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Create .env file
-        run: |
+      - run: npm ci
+      - run: |
           touch .env
-          echo "${{ secrets.environmentVar }}" > .env
-
-      - name: Display Directory Contents
-        run: ls -l
-
-      - name: Display Node.js Version
-        run: node --version
-
-      - name: Display NPM Version
-        run: npm --version
-
-      - name: Display PM2 Version
-        run: /home/ubuntu/.nvm/versions/node/v16.20.2/bin/pm2 --version
-
-      - name: Display PM2 Configuration
-        run: /home/ubuntu/.nvm/versions/node/v16.20.2/bin/pm2 show BackenedAPI
-
-      - name: Restart PM2 Process
-        run: |
-          /home/ubuntu/.nvm/versions/node/v16.20.2/bin/pm2 restart BackenedAPI 2>&1 | tee pm2-restart.log
+           echo "${{ secrets.environmentVar }}" > .env
+      - run: /home/ubuntu/.nvm/versions/node/v16.20.2/bin/pm2 restart BackenedAPI
         continue-on-error: true
-
-      - name: Display PM2 Logs
-        run: /home/ubuntu/.nvm/versions/node/v16.20.2/bin/pm2 logs BackenedAPI
